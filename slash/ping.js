@@ -8,15 +8,14 @@ export default {
   .addStringOption("name", true)
   .addIntegerOption("amount", false)
   .setPermission(Permission.Any),
-  run: (origin, amount, name) => {
-    world.sendMessage("Hello Custom Command!");
+  run: (system, origin, args) => {
+    console.warn(JSON.stringify(origin.name))
+    world.sendMessage(`Hello, ${origin.sourceType === "Entity" ? origin.name : origin.sourceType}!`);
 
-    if(name) {
-      world.sendMessage(`another ${name}`)
-    }
+      world.sendMessage(`another ${args[0]}`)
     
-    if (amount) {
-      world.sendMessage(`yo ${amount}`)
+    if (args[1]) {
+      world.sendMessage(`yo ${args[1]}`)
     }
     
     return { status: 0 }; 
