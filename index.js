@@ -22,7 +22,7 @@ system.beforeEvents.startup.subscribe((init) => {
     };
 
    for (const [enumName, values] of cmd.data.enums ?? []) {
-    init.customCommandRegistry.registerEnum(`${COMMAND_PREFIX}${enumName}`, values);
+    init.customCommandRegistry.registerEnum(enumName, values);
    }
     
 init.customCommandRegistry.registerCommand(def, (origin, ...args) => {
