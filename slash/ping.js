@@ -17,7 +17,5 @@ export default {
     if (args[1]) {
       world.sendMessage(`yo ${args[1]}`)
     }
-    
-    return { status: 0 }; //required
   }
 };
