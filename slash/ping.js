@@ -1,4 +1,4 @@
-import { world, system, CommandPermissionLevel as Permission } from "@minecraft/server";
+import { world, CommandPermissionLevel as Permission } from "@minecraft/server";
 import { Command } from "../structures/Command";
 
 export default {
@@ -7,7 +7,7 @@ export default {
   .setDescription("Ping pong")
   .addStringOption("name", true)
   .addIntegerOption("amount", false)
-  .setPermission(Permission.Any),
+  .setPermission(Permission.Any), //or just "Any"
   run: (system, origin, args) => {
   
     world.sendMessage(`Hello, ${origin.sourceType === "Entity" ? origin.source.name : origin.sourceType}!`);
