@@ -26,6 +26,8 @@ export class Command {
 
     /** @type {CommandParameter[]} */
     this.optionalParameters = [];
+    
+    this.enums = new Map();
   }
 
   /**
@@ -76,6 +78,38 @@ export class Command {
       throw new Error("Permission level must be a string or number.");
     }
 
+    return this;
+  }
+  
+  /**
+   * Registers a custom enum for use in enum parameters.
+   * @param {string} enumName - Must be prefixed (e.g. "stk:my_enum")
+   * @param {string[]} values - Enum values
+   * @returns {Command}
+   */
+  registerEnum(enumName, values) {
+    if (!Array.isArray(values) || values.length === 0)
+      throw new Error("Enum values must be a non-empty array.");
+    this.enums.set(enumName, values);
+    return this;
+  }
+  
+    /**
+   * Adds an enum option (parameter that refers to a previously registered enum).
+   * @param {string} enumName - Must match the name used in registerEnum
+   * @param {boolean} [required=false]
+   * @returns {Command}
+   */
+  addEnumOption(enumName, required = false) {
+    if (!this.enums.has(enumName)) {
+      throw new Error(`Enum "${enumName}" is not registered.`);
+    }
+    const param = { type: CommandType.Enum, name: enumName };
+    if (required) {
+      this.mandatoryParameters.push(param);
+    } else {
+      this.optionalParameters.push(param);
+    }
     return this;
   }
 
@@ -178,7 +212,7 @@ export class Command {
    * @returns {Command}
    */
   _addOption(name, type, required) {
-    const param = { name, type, required };
+    const param = { name, type };
     if (required) {
       this.mandatoryParameters.push(param);
     } else {
