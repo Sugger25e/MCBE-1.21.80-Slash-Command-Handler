@@ -12,7 +12,7 @@ system.run(() => {
   }
 });
 
-const COMMAND_PREFIX = "stk:"
+const COMMAND_PREFIX = "cmd:"
 
 system.beforeEvents.startup.subscribe((init) => {
   for (const cmd of slashRegistry) {
@@ -21,6 +21,10 @@ system.beforeEvents.startup.subscribe((init) => {
       name: `${COMMAND_PREFIX}${cmd.data.name}`,
     };
 
+   for (const [enumName, values] of cmd.data.enums ?? []) {
+    init.customCommandRegistry.registerEnum(`${COMMAND_PREFIX}${enumName}`, values);
+   }
+    
 init.customCommandRegistry.registerCommand(def, (origin, ...args) => {
     let base = null;
 
@@ -39,12 +43,7 @@ init.customCommandRegistry.registerCommand(def, (origin, ...args) => {
       break;
   }
 
-  const orig = {
-    source: base,
-    sourceType: origin.sourceType
-  };
-
-  return cmd.run(system, orig, args);
+  return cmd.run(system, {source: base, sourceType: origin.sourceType} , args);
 });
   }
 });
