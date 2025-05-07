@@ -1,16 +1,5 @@
 import { world, system } from "@minecraft/server"; 
-import { eventRegistry } from "./events/index.js";
 import { slashRegistry } from "./slash/index.js"
-
-system.run(() => {
-  for (const event of eventRegistry) {
-    const eventGroup = event.type === 0 ? world.beforeEvents : world.afterEvents;
-
-    eventGroup[event.name].subscribe((...args) => {
-      event.run(...args);
-    });
-  }
-});
 
 const COMMAND_PREFIX = "cmd:"
 
